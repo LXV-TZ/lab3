@@ -1,14 +1,21 @@
 #include "position.h"
 
-// 构造函数
-Position::Position(int r, int c) : row(r), col(c) {}
+Position::Position() : row(0), column(0) {}
 
-// 获取行
+Position::Position(int thisRow, int thisCol) : row(thisRow), column(thisCol) {}
+
 int Position::getRow() const {
     return row;
 }
 
-// 获取列
-int Position::getCol() const {
-    return col;
+int Position::getColumn() const {
+    return column;
+}
+
+void Position::setRow(int r) {
+    row = r;
+}
+
+void Position::setColumn(int c) {
+    column = c;
 }
