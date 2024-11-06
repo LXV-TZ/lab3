@@ -1,0 +1,3 @@
+C:/Users/16523/Desktop/lab3-code/cmake-build-debug/CMakeFiles/lab3_code.dir
+C:/Users/16523/Desktop/lab3-code/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/16523/Desktop/lab3-code/cmake-build-debug/CMakeFiles/rebuild_cache.dir
