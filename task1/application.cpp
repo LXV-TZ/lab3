@@ -6,24 +6,22 @@
 using namespace std;
 
 // 静态局部变量来模拟成员变量
-static vector<vector<bool>> board(8, vector<bool>(8, false));
-static int currentRow = 0;
+static vector<vector<int>> board(8, vector<int>(8, 0));
 
 // 初始化棋盘
 void Application::initialize() {
-    board.assign(8, vector<bool>(8, false));
-    currentRow = 0;
+    board.assign(8, vector<int>(8, 0));
 }
 
 // 获取起始位置
 Position Application::getStartPosition() {
-    return Position(0, -1);
+    return Position(0, 0);
 }
 
 // 检查位置是否有效
 bool Application::isValid(const Position& p) {
     int row = p.getRow();
-    int col = p.getCol();
+    int col = p.getColumn();
 
     // 检查列
     for (int i = 0; i < row; ++i) {
@@ -45,26 +43,24 @@ bool Application::isValid(const Position& p) {
 
 // 进行下一步
 void Application::progress(const Position& p) {
-    board[p.getRow()][p.getCol()] = true;
-    currentRow++;
+    board[p.getRow()][p.getColumn()] = 1;
 }
 
 // 检查是否成功
 bool Application::success(const Position& p) {
-    return currentRow == 8;
+    return p.getRow() == 8;
 }
 
 // 回退
 void Application::goBack(const Position& p) {
-    board[p.getRow()][p.getCol()] = false;
-    currentRow--;
+    board[p.getRow()][p.getColumn()] = 0;
 }
 
 // 打印棋盘
 void Application::print() {
     for (const auto& row : board) {
-        for (bool cell : row) {
-            cout << (cell ? "Q " : ". ");
+        for (int cell : row) {
+            cout << (cell == 1 ? "Q " : ". ");
         }
         cout << endl;
     }
@@ -73,16 +69,22 @@ void Application::print() {
 // Iterator类的定义
 Application::Iterator::Iterator() : currItrPosPtr(nullptr) {}
 
-Application::Iterator::Iterator(const Position& currP) : currItrPosPtr(nullptr) {}
+Application::Iterator::Iterator(const Position& currP) {
+    currItrPosPtr = new Position(currP.getRow() + 1, 0); // 从下一行开始
+}
 
-Application::Iterator::~Iterator() {}
+Application::Iterator::~Iterator() {
+    delete static_cast<Position*>(currItrPosPtr);
+}
 
 Position Application::Iterator::getNextPosition() {
-    // 实现获取下一个位置的逻辑
-    return Position(0, 0);
+    Position* curr = static_cast<Position*>(currItrPosPtr);
+    Position next(curr->getRow(), curr->getColumn());
+    curr->setColumn(curr->getColumn() + 1);
+    return next;
 }
 
 bool Application::Iterator::noNextPosition() {
-    // 实现检查是否没有下一个位置的逻辑
-    return true;
+    Position* curr = static_cast<Position*>(currItrPosPtr);
+    return curr->getColumn()>=8;//所有列都尝试了吗
 }
